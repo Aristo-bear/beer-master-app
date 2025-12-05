@@ -15,7 +15,7 @@ export const InventoryActionButtons = ({
   currentUser,
   onUpdateInventory,
   onOpenManualModal,
-  onDelete
+  onDelete,
 }: InventoryActionButtonsProps) => {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPress = useRef(false);
@@ -28,7 +28,7 @@ export const InventoryActionButtons = ({
         isOpen: true,
         itemId: item.id,
         type: type,
-        itemName: item.name
+        itemName: item.name,
       });
     }, 1500);
   };
@@ -41,7 +41,7 @@ export const InventoryActionButtons = ({
 
     if (!isLongPress.current) {
       const change = type === 'add' ? 1 : -1;
-      onUpdateInventory(item.name, change, "Быстрое изменение");
+      onUpdateInventory(item.name, change, 'Быстрое изменение');
     }
   };
 
@@ -50,9 +50,14 @@ export const InventoryActionButtons = ({
       <button
         onMouseDown={() => startPress('add')}
         onMouseUp={() => endPress('add')}
-        onMouseLeave={() => { if (timerRef.current) clearTimeout(timerRef.current); }}
+        onMouseLeave={() => {
+          if (timerRef.current) clearTimeout(timerRef.current);
+        }}
         onTouchStart={() => startPress('add')}
-        onTouchEnd={(e) => { e.preventDefault(); endPress('add'); }}
+        onTouchEnd={e => {
+          e.preventDefault();
+          endPress('add');
+        }}
         className="p-1 hover:bg-gray-600 rounded text-green-400 disabled:opacity-30 disabled:hover:bg-transparent transition-colors active:scale-95"
         title="Добавить 1 кг (Удерживайте для ввода)"
         disabled={currentUser.role === 'tester'}
@@ -62,9 +67,14 @@ export const InventoryActionButtons = ({
       <button
         onMouseDown={() => startPress('subtract')}
         onMouseUp={() => endPress('subtract')}
-        onMouseLeave={() => { if (timerRef.current) clearTimeout(timerRef.current); }}
+        onMouseLeave={() => {
+          if (timerRef.current) clearTimeout(timerRef.current);
+        }}
         onTouchStart={() => startPress('subtract')}
-        onTouchEnd={(e) => { e.preventDefault(); endPress('subtract'); }}
+        onTouchEnd={e => {
+          e.preventDefault();
+          endPress('subtract');
+        }}
         className="p-1 hover:bg-gray-600 rounded text-red-400 disabled:opacity-30 disabled:hover:bg-transparent transition-colors active:scale-95"
         title="Списать 1 кг (Удерживайте для ввода)"
         disabled={currentUser.role === 'tester'}

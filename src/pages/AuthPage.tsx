@@ -8,29 +8,33 @@ interface AuthPageProps {
 }
 
 export const AuthPage = ({ onLogin }: AuthPageProps) => {
-  const [authMode, setAuthMode] = useState<"login" | "register">("login");
-  const [formData, setFormData] = useState({ brewery: "", user: "", password: "" });
-  const [error, setError] = useState("");
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [formData, setFormData] = useState({ brewery: '', user: '', password: '' });
+  const [error, setError] = useState('');
 
   const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     if (!formData.brewery || !formData.user || !formData.password) {
-      setError("Заполните все поля");
+      setError('Заполните все поля');
       return;
     }
 
     const usersKey = `${formData.brewery}_users`;
     const storedUsersStr = localStorage.getItem(usersKey);
-    let users: UserAccount[] = storedUsersStr ? JSON.parse(storedUsersStr) : [];
+    const users: UserAccount[] = storedUsersStr ? JSON.parse(storedUsersStr) : [];
 
-    if (authMode === "register") {
+    if (authMode === 'register') {
       if (users.length > 0) {
-        setError("Пивоварня с таким именем уже существует. Пожалуйста, войдите.");
+        setError('Пивоварня с таким именем уже существует. Пожалуйста, войдите.');
         return;
       }
-      const newAdmin: UserAccount = { username: formData.user, password: formData.password, role: "admin" };
+      const newAdmin: UserAccount = {
+        username: formData.user,
+        password: formData.password,
+        role: 'admin',
+      };
       localStorage.setItem(usersKey, JSON.stringify([newAdmin]));
 
       // Seed initial data for this brewery
@@ -39,11 +43,13 @@ export const AuthPage = ({ onLogin }: AuthPageProps) => {
 
       onLogin(formData.brewery, newAdmin);
     } else {
-      const foundUser = users.find(u => u.username === formData.user && u.password === formData.password);
+      const foundUser = users.find(
+        u => u.username === formData.user && u.password === formData.password
+      );
       if (foundUser) {
         onLogin(formData.brewery, foundUser);
       } else {
-        setError("Неверное имя пивоварни, пользователь или пароль.");
+        setError('Неверное имя пивоварни, пользователь или пароль.');
       }
     }
   };
@@ -55,15 +61,19 @@ export const AuthPage = ({ onLogin }: AuthPageProps) => {
           <div className="bg-amber-500 p-3 rounded-xl mb-4">
             <Beer className="w-8 h-8 text-gray-900" />
           </div>
-          <h1 className="text-2xl font-bold text-white">BrewMaster<span className="text-amber-500">AI</span></h1>
+          <h1 className="text-2xl font-bold text-white">
+            BrewMaster<span className="text-amber-500">AI</span>
+          </h1>
           <p className="text-gray-400 text-sm mt-2">
-            {authMode === "login" ? "Вход в систему" : "Регистрация пивоварни"}
+            {authMode === 'login' ? 'Вход в систему' : 'Регистрация пивоварни'}
           </p>
         </div>
 
         <form onSubmit={handleAuth} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1 uppercase tracking-wider">Название пивоварни</label>
+            <label className="block text-xs font-medium text-gray-400 mb-1 uppercase tracking-wider">
+              Название пивоварни
+            </label>
             <div className="relative">
               <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
               <input
@@ -93,7 +103,9 @@ export const AuthPage = ({ onLogin }: AuthPageProps) => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1 uppercase tracking-wider">Пароль</label>
+            <label className="block text-xs font-medium text-gray-400 mb-1 uppercase tracking-wider">
+              Пароль
+            </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
               <input
@@ -116,16 +128,21 @@ export const AuthPage = ({ onLogin }: AuthPageProps) => {
             type="submit"
             className="w-full bg-amber-500 hover:bg-amber-400 text-gray-900 font-bold py-3 rounded-lg transition-colors mt-4 shadow-lg shadow-amber-500/20"
           >
-            {authMode === "login" ? "Войти" : "Создать базу данных"}
+            {authMode === 'login' ? 'Войти' : 'Создать базу данных'}
           </button>
         </form>
 
         <div className="mt-6 text-center">
           <button
-            onClick={() => { setAuthMode(authMode === "login" ? "register" : "login"); setError(""); }}
+            onClick={() => {
+              setAuthMode(authMode === 'login' ? 'register' : 'login');
+              setError('');
+            }}
             className="text-sm text-amber-500 hover:text-amber-400 underline decoration-dashed underline-offset-4"
           >
-            {authMode === "login" ? "Первый запуск? Зарегистрировать пивоварню" : "Уже есть аккаунт? Войти"}
+            {authMode === 'login'
+              ? 'Первый запуск? Зарегистрировать пивоварню'
+              : 'Уже есть аккаунт? Войти'}
           </button>
         </div>
       </div>

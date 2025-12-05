@@ -7,7 +7,7 @@ interface ScheduleModalProps {
   recipes: Recipe[];
   users: UserAccount[];
   onScheduleBrew: (recipeId: string) => void;
-  onScheduleShift: (username: string, type: "day" | "night") => void;
+  onScheduleShift: (username: string, type: 'day' | 'night') => void;
   onClose: () => void;
 }
 
@@ -17,7 +17,7 @@ export const ScheduleModal = ({
   users,
   onScheduleBrew,
   onScheduleShift,
-  onClose
+  onClose,
 }: ScheduleModalProps) => {
   const [activeTab, setActiveTab] = useState<'brew' | 'shift'>('brew');
 
@@ -43,7 +43,9 @@ export const ScheduleModal = ({
 
         {activeTab === 'brew' && (
           <div className="space-y-2 max-h-60 overflow-y-auto mb-6">
-            {recipes.length === 0 && <p className="text-center text-gray-500 text-sm py-4">Нет рецептов</p>}
+            {recipes.length === 0 && (
+              <p className="text-center text-gray-500 text-sm py-4">Нет рецептов</p>
+            )}
             {recipes.map(recipe => (
               <button
                 key={recipe.id}
@@ -62,7 +64,10 @@ export const ScheduleModal = ({
             <p className="text-xs text-gray-400">Назначить смену сотруднику:</p>
             <div className="space-y-2">
               {users.map(user => (
-                <div key={user.username} className="flex items-center justify-between bg-gray-700 p-2 rounded">
+                <div
+                  key={user.username}
+                  className="flex items-center justify-between bg-gray-700 p-2 rounded"
+                >
                   <span className="text-sm text-white">{user.username}</span>
                   <div className="flex gap-1">
                     <button
@@ -86,7 +91,10 @@ export const ScheduleModal = ({
           </div>
         )}
 
-        <button onClick={onClose} className="w-full bg-gray-600 hover:bg-gray-500 text-white py-2 rounded transition-colors">
+        <button
+          onClick={onClose}
+          className="w-full bg-gray-600 hover:bg-gray-500 text-white py-2 rounded transition-colors"
+        >
           Отмена
         </button>
       </div>

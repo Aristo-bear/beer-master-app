@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Plus,
-  TrendingUp,
-  CheckCircle2,
-  Droplet,
-  CheckSquare,
-  Trash2
-} from 'lucide-react';
+import { Plus, TrendingUp, CheckCircle2, Droplet, CheckSquare, Trash2 } from 'lucide-react';
 import { Task, LogEntry, InventoryItem, UserAccount } from '../types';
 
 interface DashboardPageProps {
@@ -24,12 +17,12 @@ export const DashboardPage = ({
   logs,
   inventory,
   reservedInventory,
-  currentUser
+  currentUser,
 }: DashboardPageProps) => {
-  const [newTaskText, setNewTaskText] = React.useState("");
+  const [newTaskText, setNewTaskText] = React.useState('');
 
   const toggleTask = (id: string) => {
-    setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+    setTasks(tasks.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)));
   };
 
   const addTask = () => {
@@ -38,10 +31,10 @@ export const DashboardPage = ({
       id: Date.now().toString(),
       text: newTaskText,
       completed: false,
-      priority: "normal"
+      priority: 'normal',
     };
     setTasks([newTask, ...tasks]);
-    setNewTaskText("");
+    setNewTaskText('');
   };
 
   const deleteTask = (id: string) => {
@@ -64,7 +57,9 @@ export const DashboardPage = ({
           <div className="w-full bg-gray-700 rounded-full h-2.5 mb-2">
             <div
               className="bg-amber-500 h-2.5 rounded-full transition-all duration-500"
-              style={{ width: `${tasks.length === 0 ? 0 : Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100)}%` }}
+              style={{
+                width: `${tasks.length === 0 ? 0 : Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100)}%`,
+              }}
             />
           </div>
         </div>
@@ -74,8 +69,8 @@ export const DashboardPage = ({
               <input
                 type="text"
                 value={newTaskText}
-                onChange={(e) => setNewTaskText(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && addTask()}
+                onChange={e => setNewTaskText(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && addTask()}
                 placeholder="Добавить новую задачу для смены..."
                 className="flex-1 bg-gray-900 border border-gray-700 text-white rounded-lg px-4 py-2 focus:border-amber-500 focus:outline-none"
               />
@@ -91,21 +86,26 @@ export const DashboardPage = ({
             {tasks.map(task => (
               <div
                 key={task.id}
-                className={`flex items-center justify-between p-4 rounded-lg border transition-all ${task.completed ? "bg-gray-900/50 border-gray-800 opacity-60" : "bg-gray-700/30 border-gray-600 hover:bg-gray-700/50"}`}
+                className={`flex items-center justify-between p-4 rounded-lg border transition-all ${task.completed ? 'bg-gray-900/50 border-gray-800 opacity-60' : 'bg-gray-700/30 border-gray-600 hover:bg-gray-700/50'}`}
               >
                 <div className="flex items-center gap-4 flex-1">
                   <button
                     onClick={() => toggleTask(task.id)}
-                    className={`w-6 h-6 rounded border flex items-center justify-center transition-colors ${task.completed ? "bg-green-500 border-green-500 text-white" : "bg-transparent border-gray-500 hover:border-amber-500"}`}
+                    className={`w-6 h-6 rounded border flex items-center justify-center transition-colors ${task.completed ? 'bg-green-500 border-green-500 text-white' : 'bg-transparent border-gray-500 hover:border-amber-500'}`}
                   >
                     {task.completed && <CheckCircle2 className="w-4 h-4" />}
                   </button>
-                  <span className={`text-sm md:text-base ${task.completed ? "line-through text-gray-500" : "text-gray-200"}`}>
+                  <span
+                    className={`text-sm md:text-base ${task.completed ? 'line-through text-gray-500' : 'text-gray-200'}`}
+                  >
                     {task.text}
                   </span>
                 </div>
                 {currentUser.role !== 'assistant' && currentUser.role !== 'tester' && (
-                  <button onClick={() => deleteTask(task.id)} className="text-gray-500 hover:text-red-400 p-2 transition-colors">
+                  <button
+                    onClick={() => deleteTask(task.id)}
+                    className="text-gray-500 hover:text-red-400 p-2 transition-colors"
+                  >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 )}
@@ -125,14 +125,21 @@ export const DashboardPage = ({
           <div className="p-4">
             <ul className="space-y-3">
               {logs.slice(0, 5).map(log => (
-                <li key={log.id} className="flex items-start justify-between text-sm pb-3 border-b border-gray-700 last:border-0">
+                <li
+                  key={log.id}
+                  className="flex items-start justify-between text-sm pb-3 border-b border-gray-700 last:border-0"
+                >
                   <div>
-                    <span className={`font-bold ${log.action === 'ПРИХОД' ? 'text-green-400' : log.action === 'РАСХОД' ? 'text-red-400' : 'text-purple-400'}`}>
+                    <span
+                      className={`font-bold ${log.action === 'ПРИХОД' ? 'text-green-400' : log.action === 'РАСХОД' ? 'text-red-400' : 'text-purple-400'}`}
+                    >
                       {log.action}
                     </span>
                     <p className="text-gray-300">{log.details}</p>
                   </div>
-                  <span className="text-gray-500 text-xs">{new Date(log.timestamp).toLocaleTimeString()}</span>
+                  <span className="text-gray-500 text-xs">
+                    {new Date(log.timestamp).toLocaleTimeString()}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -147,16 +154,21 @@ export const DashboardPage = ({
           </div>
           <div className="p-4">
             <ul className="space-y-3">
-              {inventory.filter(i => (i.quantity - (reservedInventory[i.id] || 0)) <= i.minLevel).map(item => (
-                <li key={item.id} className="flex items-center justify-between text-sm p-3 bg-red-900/10 border border-red-900/30 rounded-lg">
-                  <span className="text-gray-200 font-medium">{item.name}</span>
-                  <div className="flex items-center gap-3">
-                    <span className="text-red-400 font-bold">
-                      {(item.quantity - (reservedInventory[item.id] || 0)).toFixed(1)} {item.unit}
-                    </span>
-                  </div>
-                </li>
-              ))}
+              {inventory
+                .filter(i => i.quantity - (reservedInventory[i.id] || 0) <= i.minLevel)
+                .map(item => (
+                  <li
+                    key={item.id}
+                    className="flex items-center justify-between text-sm p-3 bg-red-900/10 border border-red-900/30 rounded-lg"
+                  >
+                    <span className="text-gray-200 font-medium">{item.name}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-red-400 font-bold">
+                        {(item.quantity - (reservedInventory[item.id] || 0)).toFixed(1)} {item.unit}
+                      </span>
+                    </div>
+                  </li>
+                ))}
             </ul>
           </div>
         </div>

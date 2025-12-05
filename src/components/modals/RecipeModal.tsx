@@ -15,18 +15,18 @@ export const RecipeModal = ({
   setEditingRecipe,
   inventory,
   onClose,
-  onSave
+  onSave,
 }: RecipeModalProps) => {
   if (!editingRecipe) return null;
 
-  const availableProducts = inventory.filter(i => i.category === "Готовая продукция");
-  const availableIngredients = inventory.filter(i => i.category === "Сырье");
+  const availableProducts = inventory.filter(i => i.category === 'Готовая продукция');
+  const availableIngredients = inventory.filter(i => i.category === 'Сырье');
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
       <div className="bg-gray-800 rounded-xl border border-gray-700 w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
         <h3 className="text-xl font-bold text-white mb-4">
-          {editingRecipe.id ? "Редактировать карту" : "Новая технологическая карта"}
+          {editingRecipe.id ? 'Редактировать карту' : 'Новая технологическая карта'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -34,7 +34,7 @@ export const RecipeModal = ({
             <label className="block text-xs text-gray-400 mb-1">Название карты</label>
             <input
               className="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"
-              value={editingRecipe.name || ""}
+              value={editingRecipe.name || ''}
               onChange={e => setEditingRecipe({ ...editingRecipe, name: e.target.value })}
             />
           </div>
@@ -44,19 +44,23 @@ export const RecipeModal = ({
               type="number"
               className="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"
               value={editingRecipe.outputAmount || 0}
-              onChange={e => setEditingRecipe({ ...editingRecipe, outputAmount: Number(e.target.value) })}
+              onChange={e =>
+                setEditingRecipe({ ...editingRecipe, outputAmount: Number(e.target.value) })
+              }
             />
           </div>
           <div className="md:col-span-2">
             <label className="block text-xs text-gray-400 mb-1">Производимый продукт</label>
             <select
               className="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"
-              value={editingRecipe.outputItemId || ""}
+              value={editingRecipe.outputItemId || ''}
               onChange={e => setEditingRecipe({ ...editingRecipe, outputItemId: e.target.value })}
             >
               <option value="">Выберите продукт...</option>
               {availableProducts.map(p => (
-                <option key={p.id} value={p.id}>{p.name}</option>
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
               ))}
             </select>
           </div>
@@ -66,10 +70,12 @@ export const RecipeModal = ({
           <div className="flex justify-between items-center mb-2">
             <h4 className="font-semibold text-gray-300 text-sm">Ингредиенты</h4>
             <button
-              onClick={() => setEditingRecipe({
-                ...editingRecipe,
-                ingredients: [...(editingRecipe.ingredients || []), { itemId: "", amount: 0 }]
-              })}
+              onClick={() =>
+                setEditingRecipe({
+                  ...editingRecipe,
+                  ingredients: [...(editingRecipe.ingredients || []), { itemId: '', amount: 0 }],
+                })
+              }
               className="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded text-white flex items-center gap-1"
             >
               <Plus className="w-3 h-3" /> Добавить компонент
@@ -89,7 +95,9 @@ export const RecipeModal = ({
                 >
                   <option value="">Выберите сырье...</option>
                   {availableIngredients.map(i => (
-                    <option key={i.id} value={i.id}>{i.name} ({i.unit})</option>
+                    <option key={i.id} value={i.id}>
+                      {i.name} ({i.unit})
+                    </option>
                   ))}
                 </select>
                 <input

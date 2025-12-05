@@ -12,7 +12,7 @@ export const InventoryModal = ({
   newInventoryItem,
   setNewInventoryItem,
   onClose,
-  onAdd
+  onAdd,
 }: InventoryModalProps) => {
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
@@ -23,7 +23,7 @@ export const InventoryModal = ({
             <label className="block text-xs text-gray-400 mb-1">Название</label>
             <input
               className="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"
-              value={newInventoryItem.name || ""}
+              value={newInventoryItem.name || ''}
               onChange={e => setNewInventoryItem({ ...newInventoryItem, name: e.target.value })}
               placeholder="Например: Солод Pale Ale"
             />
@@ -34,7 +34,9 @@ export const InventoryModal = ({
               <select
                 className="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"
                 value={newInventoryItem.category}
-                onChange={e => setNewInventoryItem({ ...newInventoryItem, category: e.target.value as Category })}
+                onChange={e =>
+                  setNewInventoryItem({ ...newInventoryItem, category: e.target.value as Category })
+                }
               >
                 <option value="Сырье">Сырье</option>
                 <option value="Готовая продукция">Готовая продукция</option>
@@ -57,7 +59,9 @@ export const InventoryModal = ({
                 step="0.1"
                 className="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"
                 value={newInventoryItem.quantity}
-                onChange={e => setNewInventoryItem({ ...newInventoryItem, quantity: Number(e.target.value) })}
+                onChange={e =>
+                  setNewInventoryItem({ ...newInventoryItem, quantity: Number(e.target.value) })
+                }
               />
             </div>
             <div>
@@ -67,7 +71,9 @@ export const InventoryModal = ({
                 step="0.1"
                 className="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"
                 value={newInventoryItem.minLevel}
-                onChange={e => setNewInventoryItem({ ...newInventoryItem, minLevel: Number(e.target.value) })}
+                onChange={e =>
+                  setNewInventoryItem({ ...newInventoryItem, minLevel: Number(e.target.value) })
+                }
               />
             </div>
           </div>

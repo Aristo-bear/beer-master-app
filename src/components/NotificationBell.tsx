@@ -56,7 +56,10 @@ export const NotificationBell = ({ notifications, onClear }: NotificationBellPro
               <div className="p-4 text-center text-gray-500 text-xs">Нет новых уведомлений</div>
             ) : (
               notifications.map(note => (
-                <div key={note.id} className="p-3 border-b border-gray-700 last:border-0 hover:bg-gray-700/50 transition-colors">
+                <div
+                  key={note.id}
+                  className="p-3 border-b border-gray-700 last:border-0 hover:bg-gray-700/50 transition-colors"
+                >
                   <div className="flex gap-2">
                     <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5" />
                     <div>

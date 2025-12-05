@@ -14,7 +14,7 @@ export const ManualInputModal = ({
   manualValue,
   setManualValue,
   onClose,
-  onConfirm
+  onConfirm,
 }: ManualInputModalProps) => {
   if (!modalState.isOpen) return null;
 
@@ -22,7 +22,11 @@ export const ManualInputModal = ({
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] p-4 backdrop-blur-sm">
       <div className="bg-gray-800 rounded-xl border border-gray-700 w-full max-w-sm p-6">
         <h3 className="text-xl font-bold text-white mb-2">
-          {modalState.type === 'add' ? 'Поступление' : modalState.type === 'subtract' ? 'Списание' : 'Корректировка остатка'}
+          {modalState.type === 'add'
+            ? 'Поступление'
+            : modalState.type === 'subtract'
+              ? 'Списание'
+              : 'Корректировка остатка'}
         </h3>
         <p className="text-gray-400 text-sm mb-4">{modalState.itemName}</p>
 
@@ -32,7 +36,7 @@ export const ManualInputModal = ({
             step="0.1"
             autoFocus
             value={manualValue}
-            onChange={(e) => setManualValue(e.target.value)}
+            onChange={e => setManualValue(e.target.value)}
             placeholder="0.0"
             className="w-full bg-gray-900 border border-gray-700 text-3xl font-mono text-center text-white rounded-lg p-4 focus:border-blue-500 focus:outline-none"
           />
@@ -49,9 +53,11 @@ export const ManualInputModal = ({
           <button
             onClick={onConfirm}
             className={`flex-1 text-white py-3 rounded-lg font-bold ${
-              modalState.type === 'add' ? 'bg-green-600 hover:bg-green-500' :
-              modalState.type === 'subtract' ? 'bg-red-600 hover:bg-red-500' :
-              'bg-blue-600 hover:bg-blue-500'
+              modalState.type === 'add'
+                ? 'bg-green-600 hover:bg-green-500'
+                : modalState.type === 'subtract'
+                  ? 'bg-red-600 hover:bg-red-500'
+                  : 'bg-blue-600 hover:bg-blue-500'
             }`}
           >
             Подтвердить

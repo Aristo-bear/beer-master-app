@@ -13,7 +13,20 @@ npm install          # Install dependencies (required first)
 npm run dev          # Start Vite dev server on port 3000
 npm run build        # Production build to dist/
 npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm run lint:fix     # Run ESLint with auto-fix
+npm run format       # Format code with Prettier
+npm run format:check # Check formatting without changes
+npm run typecheck    # Run TypeScript type checking
 ```
+
+## Code Quality
+
+- **ESLint**: Configured for TypeScript and React with `eslint.config.js`
+- **Prettier**: Code formatting with `.prettierrc` (single quotes, trailing commas, 100 char width)
+- **TypeScript**: Strict mode enabled via `tsconfig.json`
+
+Run `npm run lint:fix && npm run format` before committing.
 
 ## Environment Setup
 

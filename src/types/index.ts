@@ -1,5 +1,5 @@
-export type Category = "Сырье" | "Готовая продукция";
-export type UserRole = "admin" | "brewer" | "assistant" | "tester";
+export type Category = 'Сырье' | 'Готовая продукция';
+export type UserRole = 'admin' | 'brewer' | 'assistant' | 'tester';
 
 export interface InventoryItem {
   id: string;
@@ -18,7 +18,7 @@ export interface LogEntry {
 }
 
 export interface Message {
-  role: "user" | "model";
+  role: 'user' | 'model';
   text: string;
   isThinking?: boolean;
 }
@@ -40,20 +40,20 @@ export interface ScheduledBrew {
   id: string;
   date: string;
   recipeId: string;
-  status: "planned" | "completed";
+  status: 'planned' | 'completed';
 }
 
 export interface WorkShift {
   id: string;
   date: string;
   username: string;
-  type: "day" | "night";
+  type: 'day' | 'night';
 }
 
 export interface Notification {
   id: string;
   message: string;
-  type: "warning" | "info" | "success";
+  type: 'warning' | 'info' | 'success';
   read: boolean;
   timestamp: string;
 }
@@ -62,7 +62,7 @@ export interface Task {
   id: string;
   text: string;
   completed: boolean;
-  priority: "high" | "normal";
+  priority: 'high' | 'normal';
 }
 
 export interface UserAccount {

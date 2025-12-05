@@ -10,7 +10,7 @@ import {
   Notification,
   BeforeInstallPromptEvent,
   ManualInputModalState,
-  Category
+  Category,
 } from '../types';
 import { INITIAL_INVENTORY, INITIAL_RECIPES, INITIAL_TASKS } from '../data/initialData';
 import { useStickyState } from '../hooks/useStickyState';
@@ -22,7 +22,7 @@ import {
   ProductionPage,
   AIAssistantPage,
   IntegrationsPage,
-  EmployeesPage
+  EmployeesPage,
 } from '../pages';
 
 interface BreweryAppProps {
@@ -32,14 +32,20 @@ interface BreweryAppProps {
 }
 
 export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppProps) => {
-  const [activeTab, setActiveTab] = useState<TabType>("dashboard");
+  const [activeTab, setActiveTab] = useState<TabType>('dashboard');
 
   // Persistent State (Scoped to Brewery)
-  const [inventory, setInventory] = useStickyState<InventoryItem[]>(INITIAL_INVENTORY, `${breweryName}_inventory`);
+  const [inventory, setInventory] = useStickyState<InventoryItem[]>(
+    INITIAL_INVENTORY,
+    `${breweryName}_inventory`
+  );
   const [recipes, setRecipes] = useStickyState<Recipe[]>(INITIAL_RECIPES, `${breweryName}_recipes`);
   const [logs, setLogs] = useStickyState<LogEntry[]>([], `${breweryName}_logs`);
   const [tasks, setTasks] = useStickyState<Task[]>(INITIAL_TASKS, `${breweryName}_tasks`);
-  const [scheduledBrews, setScheduledBrews] = useStickyState<ScheduledBrew[]>([], `${breweryName}_schedule`);
+  const [scheduledBrews, setScheduledBrews] = useStickyState<ScheduledBrew[]>(
+    [],
+    `${breweryName}_schedule`
+  );
   const [workShifts, setWorkShifts] = useStickyState<WorkShift[]>([], `${breweryName}_shifts`);
   const [users, setUsers] = useStickyState<UserAccount[]>([], `${breweryName}_users`);
 
@@ -54,18 +60,30 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
 
   // Modal States
   const [isInventoryModalOpen, setIsInventoryModalOpen] = useState(false);
-  const [newInventoryItem, setNewInventoryItem] = useState<Partial<InventoryItem>>({ category: "Сырье", unit: "кг", minLevel: 0, quantity: 0 });
+  const [newInventoryItem, setNewInventoryItem] = useState<Partial<InventoryItem>>({
+    category: 'Сырье',
+    unit: 'кг',
+    minLevel: 0,
+    quantity: 0,
+  });
 
   const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Partial<Recipe> | null>(null);
 
   const [isEmployeeModalOpen, setIsEmployeeModalOpen] = useState(false);
-  const [newEmployee, setNewEmployee] = useState<UserAccount>({ username: "", password: "", role: "assistant" });
+  const [newEmployee, setNewEmployee] = useState<UserAccount>({
+    username: '',
+    password: '',
+    role: 'assistant',
+  });
 
   const [manualInputModal, setManualInputModal] = useState<ManualInputModalState>({
-    isOpen: false, itemId: null, type: 'add', itemName: ''
+    isOpen: false,
+    itemId: null,
+    type: 'add',
+    itemName: '',
   });
-  const [manualValue, setManualValue] = useState<string>("");
+  const [manualValue, setManualValue] = useState<string>('');
 
   // PWA Install Handler
   useEffect(() => {
@@ -113,9 +131,9 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
     const alerts: Notification[] = lowStockItems.map(item => ({
       id: `alert-${item.id}-${Date.now()}`,
       message: `Низкий доступный остаток: ${item.name} (Доступно: ${item.quantity - (reservedInventory[item.id] || 0)} ${item.unit})`,
-      type: "warning",
+      type: 'warning',
       read: false,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }));
 
     if (alerts.length > 0) {
@@ -129,8 +147,11 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
   // Inventory Logic
   const handleUpdateInventory = (itemName: string, change: number, reason: string): string => {
     let itemFound = false;
-    let newInventory = inventory.map(item => {
-      if (item.name.toLowerCase() === itemName.toLowerCase() || item.name.toLowerCase().includes(itemName.toLowerCase())) {
+    const newInventory = inventory.map(item => {
+      if (
+        item.name.toLowerCase() === itemName.toLowerCase() ||
+        item.name.toLowerCase().includes(itemName.toLowerCase())
+      ) {
         itemFound = true;
         const newQuantity = Math.max(0, Number((item.quantity + change).toFixed(2)));
         return { ...item, quantity: newQuantity };
@@ -147,8 +168,8 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
     const newLog: LogEntry = {
       id: Date.now().toString(),
       timestamp: new Date().toISOString(),
-      action: change > 0 ? "ПРИХОД" : change < 0 ? "РАСХОД" : "КОРРЕКЦИЯ",
-      details: `${itemName}: ${change > 0 ? '+' : ''}${change} (${reason}) - ${currentUser.username}`
+      action: change > 0 ? 'ПРИХОД' : change < 0 ? 'РАСХОД' : 'КОРРЕКЦИЯ',
+      details: `${itemName}: ${change > 0 ? '+' : ''}${change} (${reason}) - ${currentUser.username}`,
     };
     setLogs(prev => [newLog, ...prev]);
 
@@ -162,16 +183,16 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
       name: newInventoryItem.name,
       category: newInventoryItem.category as Category,
       quantity: Number(newInventoryItem.quantity) || 0,
-      unit: "кг",
-      minLevel: Number(newInventoryItem.minLevel) || 0
+      unit: 'кг',
+      minLevel: Number(newInventoryItem.minLevel) || 0,
     };
     setInventory([...inventory, newItem]);
     setIsInventoryModalOpen(false);
-    setNewInventoryItem({ category: "Сырье", unit: "кг", minLevel: 0, quantity: 0 });
+    setNewInventoryItem({ category: 'Сырье', unit: 'кг', minLevel: 0, quantity: 0 });
   };
 
   const handleDeleteInventoryItem = (id: string) => {
-    if (confirm("Вы уверены, что хотите удалить эту позицию?")) {
+    if (confirm('Вы уверены, что хотите удалить эту позицию?')) {
       setInventory(inventory.filter(i => i.id !== id));
     }
   };
@@ -179,7 +200,7 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
   // Recipe Logic
   const handleSaveRecipe = () => {
     if (!editingRecipe || !editingRecipe.name || !editingRecipe.outputItemId) {
-      alert("Пожалуйста, заполните основные поля");
+      alert('Пожалуйста, заполните основные поля');
       return;
     }
 
@@ -188,11 +209,11 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
       name: editingRecipe.name,
       outputItemId: editingRecipe.outputItemId,
       outputAmount: Number(editingRecipe.outputAmount) || 0,
-      ingredients: editingRecipe.ingredients || []
+      ingredients: editingRecipe.ingredients || [],
     };
 
     if (editingRecipe.id) {
-      setRecipes(recipes.map(r => r.id === editingRecipe.id ? newRecipe : r));
+      setRecipes(recipes.map(r => (r.id === editingRecipe.id ? newRecipe : r)));
     } else {
       setRecipes([...recipes, newRecipe]);
     }
@@ -201,7 +222,7 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
   };
 
   const handleDeleteRecipe = (id: string) => {
-    if (confirm("Удалить эту технологическую карту?")) {
+    if (confirm('Удалить эту технологическую карту?')) {
       setRecipes(recipes.filter(r => r.id !== id));
     }
   };
@@ -211,12 +232,12 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
     recipe.ingredients.forEach(ing => {
       const stockItem = inventory.find(i => i.id === ing.itemId);
       if (!stockItem || stockItem.quantity < ing.amount) {
-        missingIngredients.push(stockItem ? stockItem.name : "Неизвестный компонент");
+        missingIngredients.push(stockItem ? stockItem.name : 'Неизвестный компонент');
       }
     });
 
     if (missingIngredients.length > 0) {
-      alert(`Ошибка! Недостаточно ингредиентов на складе: ${missingIngredients.join(", ")}`);
+      alert(`Ошибка! Недостаточно ингредиентов на складе: ${missingIngredients.join(', ')}`);
       return;
     }
 
@@ -234,26 +255,29 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
     setInventory(newInventory);
 
     if (scheduledBrewId) {
-      setScheduledBrews(prev => prev.map(sb =>
-        sb.id === scheduledBrewId ? { ...sb, status: 'completed' } : sb
-      ));
+      setScheduledBrews(prev =>
+        prev.map(sb => (sb.id === scheduledBrewId ? { ...sb, status: 'completed' } : sb))
+      );
     }
 
     const newLog: LogEntry = {
       id: Date.now().toString(),
       timestamp: new Date().toISOString(),
-      action: "ПРОИЗВОДСТВО",
-      details: `Сварено ${recipe.outputAmount}л ${recipe.name}. (${currentUser.username})`
+      action: 'ПРОИЗВОДСТВО',
+      details: `Сварено ${recipe.outputAmount}л ${recipe.name}. (${currentUser.username})`,
     };
     setLogs(prev => [newLog, ...prev]);
 
-    setNotifications(prev => [{
-      id: Date.now().toString(),
-      message: `Производство завершено: ${recipe.name}`,
-      type: "success",
-      read: false,
-      timestamp: new Date().toISOString()
-    }, ...prev]);
+    setNotifications(prev => [
+      {
+        id: Date.now().toString(),
+        message: `Производство завершено: ${recipe.name}`,
+        type: 'success',
+        read: false,
+        timestamp: new Date().toISOString(),
+      },
+      ...prev,
+    ]);
   };
 
   // Schedule Logic
@@ -262,20 +286,20 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
       id: `brew-${Date.now()}`,
       date: date,
       recipeId: recipeId,
-      status: "planned"
+      status: 'planned',
     };
     setScheduledBrews([...scheduledBrews, newBrew]);
   };
 
   const handleDeleteScheduledBrew = (brewId: string) => {
-    if (confirm("Удалить запланированную варку? Резерв сырья будет снят.")) {
+    if (confirm('Удалить запланированную варку? Резерв сырья будет снят.')) {
       setScheduledBrews(scheduledBrews.filter(b => b.id !== brewId));
     }
   };
 
-  const handleScheduleShift = (username: string, type: "day" | "night", date: string) => {
+  const handleScheduleShift = (username: string, type: 'day' | 'night', date: string) => {
     if (workShifts.some(s => s.date === date && s.username === username)) {
-      alert("Этот сотрудник уже работает в этот день.");
+      alert('Этот сотрудник уже работает в этот день.');
       return;
     }
 
@@ -283,13 +307,13 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
       id: `shift-${Date.now()}`,
       date: date,
       username: username,
-      type: type
+      type: type,
     };
     setWorkShifts([...workShifts, newShift]);
   };
 
   const handleDeleteShift = (shiftId: string) => {
-    if (confirm("Удалить смену сотрудника?")) {
+    if (confirm('Удалить смену сотрудника?')) {
       setWorkShifts(workShifts.filter(s => s.id !== shiftId));
     }
   };
@@ -298,17 +322,17 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
   const handleAddEmployee = () => {
     if (!newEmployee.username || !newEmployee.password) return;
     if (users.some(u => u.username === newEmployee.username)) {
-      alert("Пользователь с таким именем уже существует");
+      alert('Пользователь с таким именем уже существует');
       return;
     }
     setUsers([...users, newEmployee]);
     setIsEmployeeModalOpen(false);
-    setNewEmployee({ username: "", password: "", role: "assistant" });
+    setNewEmployee({ username: '', password: '', role: 'assistant' });
   };
 
   const handleDeleteEmployee = (username: string) => {
     if (username === currentUser.username) {
-      alert("Нельзя удалить самого себя");
+      alert('Нельзя удалить самого себя');
       return;
     }
     if (confirm(`Удалить сотрудника ${username}?`)) {
@@ -321,21 +345,21 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
     const val = parseFloat(manualValue);
     if (!isNaN(val) && manualInputModal.itemId) {
       let change = 0;
-      let reason = "";
+      let reason = '';
       if (manualInputModal.type === 'set') {
         const current = manualInputModal.currentValue || 0;
         change = val - current;
-        reason = "Инвентаризация / Коррекция";
+        reason = 'Инвентаризация / Коррекция';
       } else {
         change = manualInputModal.type === 'add' ? val : -val;
-        reason = "Ручной ввод (точное значение)";
+        reason = 'Ручной ввод (точное значение)';
       }
 
       if (change !== 0) {
         handleUpdateInventory(manualInputModal.itemName, change, reason);
       }
       setManualInputModal({ ...manualInputModal, isOpen: false });
-      setManualValue("");
+      setManualValue('');
     }
   };
 
@@ -375,7 +399,10 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
             editingRecipe={editingRecipe}
             setEditingRecipe={setEditingRecipe}
             inventory={inventory}
-            onClose={() => { setIsRecipeModalOpen(false); setEditingRecipe(null); }}
+            onClose={() => {
+              setIsRecipeModalOpen(false);
+              setEditingRecipe(null);
+            }}
             onSave={handleSaveRecipe}
           />
         )}
@@ -392,7 +419,10 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
             modalState={manualInputModal}
             manualValue={manualValue}
             setManualValue={setManualValue}
-            onClose={() => { setManualInputModal({ ...manualInputModal, isOpen: false }); setManualValue(""); }}
+            onClose={() => {
+              setManualInputModal({ ...manualInputModal, isOpen: false });
+              setManualValue('');
+            }}
             onConfirm={handleManualInputConfirm}
           />
         )}
@@ -436,7 +466,10 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
             workShifts={workShifts}
             users={users}
             currentUser={currentUser}
-            onOpenRecipeModal={(recipe) => { setEditingRecipe(recipe || null); setIsRecipeModalOpen(true); }}
+            onOpenRecipeModal={recipe => {
+              setEditingRecipe(recipe || null);
+              setIsRecipeModalOpen(true);
+            }}
             onDeleteRecipe={handleDeleteRecipe}
             onBrew={handleBrew}
             onScheduleBrew={handleScheduleBrew}
@@ -447,10 +480,7 @@ export const BreweryApp = ({ breweryName, currentUser, onLogout }: BreweryAppPro
         )}
 
         {activeTab === 'ai' && (
-          <AIAssistantPage
-            inventory={inventory}
-            onUpdateInventory={handleUpdateInventory}
-          />
+          <AIAssistantPage inventory={inventory} onUpdateInventory={handleUpdateInventory} />
         )}
 
         {activeTab === 'integrations' && <IntegrationsPage />}

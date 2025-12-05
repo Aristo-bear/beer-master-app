@@ -13,7 +13,7 @@ export const EmployeesPage = ({
   users,
   currentUser,
   onOpenEmployeeModal,
-  onDeleteEmployee
+  onDeleteEmployee,
 }: EmployeesPageProps) => {
   if (currentUser.role !== 'admin') {
     return <div className="p-8 text-center text-gray-500">Доступ запрещен</div>;
@@ -46,13 +46,24 @@ export const EmployeesPage = ({
               <tr key={idx} className="hover:bg-gray-700/50">
                 <td className="p-4 font-medium text-white">{user.username}</td>
                 <td className="p-4">
-                  <span className={`text-xs px-2 py-1 rounded uppercase font-bold ${
-                    user.role === 'admin' ? 'bg-amber-900/30 text-amber-500' :
-                    user.role === 'brewer' ? 'bg-blue-900/30 text-blue-500' :
-                    user.role === 'tester' ? 'bg-pink-900/30 text-pink-500' :
-                    'bg-gray-700 text-gray-400'
-                  }`}>
-                    {user.role === 'admin' ? 'Администратор' : user.role === 'brewer' ? 'Пивовар' : user.role === 'tester' ? 'Тестер' : 'Помощник'}
+                  <span
+                    className={`text-xs px-2 py-1 rounded uppercase font-bold ${
+                      user.role === 'admin'
+                        ? 'bg-amber-900/30 text-amber-500'
+                        : user.role === 'brewer'
+                          ? 'bg-blue-900/30 text-blue-500'
+                          : user.role === 'tester'
+                            ? 'bg-pink-900/30 text-pink-500'
+                            : 'bg-gray-700 text-gray-400'
+                    }`}
+                  >
+                    {user.role === 'admin'
+                      ? 'Администратор'
+                      : user.role === 'brewer'
+                        ? 'Пивовар'
+                        : user.role === 'tester'
+                          ? 'Тестер'
+                          : 'Помощник'}
                   </span>
                 </td>
                 <td className="p-4 text-gray-500 font-mono text-xs">{user.password}</td>
