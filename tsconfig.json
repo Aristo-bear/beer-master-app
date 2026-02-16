@@ -1,4 +1,10 @@
 {
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
   "compilerOptions": {
     "target": "ES2022",
     "experimentalDecorators": true,
@@ -10,11 +16,7 @@
       "DOM.Iterable"
     ],
     "skipLibCheck": true,
-    "types": [],
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -28,7 +30,6 @@
   },
   "include": [
     "src",
-    "index.tsx",
-    "vite.config.ts"
+    "index.tsx"
   ]
 }
