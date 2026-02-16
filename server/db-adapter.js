@@ -77,7 +77,16 @@ class DBAdapter {
     // Callback receives 'this' (the adapter) to run commands
     async transaction(callback) {
         if (this.type === 'sqlite') {
-            const tx = this.db.transaction(() => callback(this));
+            // For SQLite, we need to provide synchronous methods
+            const syncAdapter = {
+                run: (sql, params) => this.db.prepare(sql).run(params),
+                get: (sql, params) => this.db.prepare(sql).all(params),
+                all: (sql, params) => this.db.prepare(sql).all(params)
+            };
+
+            const tx = this.db.transaction(() => {
+                callback(syncAdapter);
+            });
             return tx();
         } else {
             const client = await this.db.connect();

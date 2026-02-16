@@ -1900,22 +1900,24 @@ const Root = () => {
 
     useEffect(() => {
         // Check for saved session
-        const session = localStorage.getItem("brewmaster_session");
-        if (session) {
+        const token = localStorage.getItem('brewmaster_session_token');
+        if (token) {
             try {
-                const { brewery, username } = JSON.parse(session);
-                const token = localStorage.getItem('brewmaster_session_token');
+                // Decode JWT to get breweryId (JWT format: header.payload.signature)
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const { username, breweryId } = payload;
 
-                if (brewery && username && token) {
+                if (username && breweryId) {
                     // Try to restore session by fetching data
-                    api.data.init(brewery) // We used breweryName as ID mostly
+                    api.data.init(breweryId)
                         .then(initialData => {
-                            setFormData({ brewery, user: username, password: "" });
-                            setBreweryData(initialData);
                             const user = initialData.users.find((u: UserAccount) => u.username === username);
                             if (user) {
                                 setCurrentUser(user);
+                                setBreweryData(initialData);
                                 setIsAuthenticated(true);
+                                // Set formData for display purposes only
+                                setFormData({ brewery: breweryId, user: username, password: "" });
                             } else {
                                 // User might have been deleted
                                 handleLogout();
@@ -1923,14 +1925,18 @@ const Root = () => {
                         })
                         .catch(err => {
                             console.error("Session restore failed", err);
-                            // handleLogout(); // Optional: force logout if token invalid
+                            // Force logout if token invalid
+                            handleLogout();
                         });
                 }
             } catch (e) {
                 console.error("Session restore failed", e);
+                handleLogout();
             }
         }
+    }, []);
 
+    useEffect(() => {
         const handleBeforeInstallPrompt = (e: Event) => {
             e.preventDefault();
             setInstallPrompt(e as BeforeInstallPromptEvent);

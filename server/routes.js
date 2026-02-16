@@ -73,7 +73,12 @@ router.post('/auth/login', async (req, res) => {
 // Init Data (Fetch all)
 router.get('/init/:breweryId', authenticateToken, async (req, res) => {
     const { breweryId } = req.params;
-    if (req.user.breweryId !== breweryId) return res.sendStatus(403);
+    console.log('Init request - Requested breweryId:', breweryId);
+    console.log('Init request - Token breweryId:', req.user.breweryId);
+    if (req.user.breweryId !== breweryId) {
+        console.log('403 - Brewery ID mismatch!');
+        return res.sendStatus(403);
+    }
 
     try {
         const inventory = await db.all('SELECT * FROM inventory WHERE brewery_id = ?', [breweryId]);
@@ -112,9 +117,9 @@ router.post('/inventory/batch', authenticateToken, async (req, res) => {
     const breweryId = req.user.breweryId;
 
     try {
-        await db.transaction(async (tx) => {
+        await db.transaction((tx) => {
             for (const item of items) {
-                await tx.run(
+                tx.run(
                     'INSERT OR REPLACE INTO inventory (id, name, category, quantity, unit, min_level, brewery_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
                     [item.id, item.name, item.category, item.quantity, item.unit, item.minLevel, breweryId]
                 );
@@ -122,7 +127,8 @@ router.post('/inventory/batch', authenticateToken, async (req, res) => {
         });
         res.json({ success: true });
     } catch (error) {
-        console.error(error);
+        console.error('Inventory batch error:', error);
+        console.error('Items received:', JSON.stringify(req.body.items, null, 2));
         res.status(500).json({ error: 'Failed to update inventory' });
     }
 });
