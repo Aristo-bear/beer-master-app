@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import './index.css';
 import { createRoot } from "react-dom/client";
 import { GoogleGenAI, Type } from "@google/genai";
-import { api } from "./services/api";
+import { api } from "./src/services/api";
 // Import Types separately to avoid runtime errors in browser
 import type { FunctionDeclaration } from "@google/genai";
 
