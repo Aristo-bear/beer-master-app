@@ -69,6 +69,7 @@ export interface UserAccount {
   username: string;
   password: string;
   role: UserRole;
+  breweryId?: string;
 }
 
 export interface BeforeInstallPromptEvent extends Event {
