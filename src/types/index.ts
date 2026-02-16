@@ -58,11 +58,32 @@ export interface Notification {
   timestamp: string;
 }
 
+export interface Attachment {
+  id: string;
+  name: string;
+  type: string;
+  data: string; // Base64
+  size: number;
+}
+
+export interface Block {
+  index: number;
+  timestamp: string;
+  data: {
+    action: string;
+    details: string;
+    user: string;
+  };
+  previousHash: string;
+  hash: string;
+}
+
 export interface Task {
   id: string;
   text: string;
   completed: boolean;
   priority: 'high' | 'normal';
+  attachments?: Attachment[];
 }
 
 export interface UserAccount {

@@ -5,6 +5,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { api } from "./src/services/api";
 // Import Types separately to avoid runtime errors in browser
 import type { FunctionDeclaration } from "@google/genai";
+import { UserAccount, InventoryItem, Recipe, ScheduledBrew, WorkShift, Task, Ingredient, Message, ManualInputModalState, Block, Attachment, Notification } from "./src/types";
 
 import {
     Beer,
@@ -78,90 +79,9 @@ declare global {
 type Category = "Сырье" | "Готовая продукция";
 type UserRole = "admin" | "brewer" | "assistant" | "tester";
 
-interface InventoryItem {
-    id: string;
-    name: string;
-    category: Category;
-    quantity: number;
-    unit: string;
-    minLevel: number;
-}
 
-// Blockchain Block Interface
-interface Block {
-    index: number;
-    timestamp: string;
-    data: {
-        action: string;
-        details: string;
-        user: string;
-    };
-    previousHash: string;
-    hash: string;
-}
 
-interface Message {
-    role: "user" | "model";
-    text: string;
-    isThinking?: boolean;
-}
 
-interface Ingredient {
-    itemId: string;
-    amount: number;
-}
-
-interface Recipe {
-    id: string;
-    name: string;
-    outputItemId: string;
-    outputAmount: number;
-    ingredients: Ingredient[];
-}
-
-interface ScheduledBrew {
-    id: string;
-    date: string; // ISO Date string YYYY-MM-DD
-    recipeId: string;
-    status: "planned" | "completed";
-}
-
-interface WorkShift {
-    id: string;
-    date: string;
-    username: string;
-    type: "day" | "night";
-}
-
-interface Notification {
-    id: string;
-    message: string;
-    type: "warning" | "info" | "success";
-    read: boolean;
-    timestamp: string;
-}
-
-interface Attachment {
-    id: string;
-    name: string;
-    type: string;
-    data: string; // Base64
-    size: number;
-}
-
-interface Task {
-    id: string;
-    text: string;
-    completed: boolean;
-    priority: "high" | "normal";
-    attachments?: Attachment[];
-}
-
-interface UserAccount {
-    username: string;
-    password: string;
-    role: UserRole;
-}
 
 interface BreweryData {
     inventory: InventoryItem[];
